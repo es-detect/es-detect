@@ -1,0 +1,52 @@
+const acorn = require('acorn')
+
+const Detector = require('../Detector')
+
+const ACORN_ECMA_VERSIONS = [10, 9, 8, 8, 6, 5]
+
+module.exports = class AcornDetector extends Detector {
+  detect (source, ecmaVersion = 7) {
+    try {
+      acorn.parse(source, { ecmaVersion })
+    } catch (err) {
+      return { esVersion: 0, msg: err.message }
+    }
+    return { esVersion: ecmaVersion }
+  }
+
+  detectESVersion (source) {
+    for (const version of ACORN_ECMA_VERSIONS) {
+      const result = this.detect(source, version)
+      if (result.esVersion !== 0) {
+        return result
+      }
+    }
+    return { esVersion: 0, msg: 'No ecmaScript version is found in given resource' }
+  }
+
+  detectCodes (source, ecmaVersion) {
+    if (ecmaVersion === undefined) {
+      return this.detectESVersion(source)
+    }
+    return this.detect(source, ecmaVersion)
+  }
+
+  detectFile (fileName, ecmaVersion) {
+    const source = this.readSource(fileName)
+    return this.detectCodes(source, ecmaVersion)
+  }
+
+  detectFiles (pattern, ecmaVersion) {
+    const files = this.searchFiles(pattern)
+    const compTable = {}
+    for (const file of files) {
+      compTable[file] = this.detectFile(file, ecmaVersion)
+    }
+    return compTable
+  }
+
+  detectModule (moduleName, ecmaVersion) {
+    const file = require.resolve(moduleName)
+    return this.detectFile(file, ecmaVersion)
+  }
+}
