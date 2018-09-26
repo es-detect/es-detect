@@ -2,13 +2,21 @@ const acorn = require('acorn')
 const { readFileSync } = require('fs')
 
 module.exports = class Detector {
-  detect (fileName, ecmaVersion = 7) {
-    const source = readFileSync(fileName, 'utf-8')
+  readSource (fileName) {
+    return readFileSync(fileName, 'utf-8')
+  }
+
+  detect (source, ecmaVersion = 7) {
     try {
       acorn.parse(source, { ecmaVersion })
     } catch (err) {
       return { compatible: false, msg: err.message }
     }
     return { compatible: true }
+  }
+
+  detectFile (fileName, ecmaVersion) {
+    const source = this.readSource(fileName)
+    return this.detect(source, ecmaVersion)
   }
 }
