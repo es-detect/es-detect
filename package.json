@@ -10,8 +10,9 @@
     "Pooya Parsa <pooya@pi0.ir>"
   ],
   "scripts": {
-    "test": "npm run lint",
-    "lint": "eslint src test"
+    "test": "npm run lint && npm run jest",
+    "lint": "eslint src test",
+    "jest": "jest"
   },
   "dependencies": {
     "acorn": "^6.0.2",
@@ -20,6 +21,7 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
+    "codecov": "^3.1.0",
     "eslint": "^5.6.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",
