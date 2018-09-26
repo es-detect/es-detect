@@ -1,24 +1,20 @@
-const glob = require('glob')
-const { readFileSync } = require('fs')
+const AcornDetector = require('./detectors/acorn')
 
 module.exports = class Detector {
-  detect (source, ecmaVersion) {}
-
-  detectESVersion (source) {}
-
-  detectCodes (source, ecmaVersion) {}
-
-  detectFile (fileName, ecmaVersion) {}
-
-  detectFiles (pattern, ecmaVersion) {}
-
-  detectModule (moduleName, ecmaVersion) {}
-
-  readSource (fileName) {
-    return readFileSync(fileName, 'utf-8')
+  constructor () {
+    this.detectors = [
+      new AcornDetector()
+    ]
   }
 
-  searchFiles (pattern) {
-    return glob.sync(pattern, { nodir: true })
+  detect (context) {
+    for (const detector of this.detectors) {
+      try {
+        detector.detect(context)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    return context
   }
 }
