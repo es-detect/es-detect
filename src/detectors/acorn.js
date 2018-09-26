@@ -1,12 +1,13 @@
+const sortBy = require('lodash/sortBy')
 const BaseDetector = require('./base')
 
 module.exports = class AcornDetector extends BaseDetector {
   constructor (options) {
     // Assign options and defaults
-    super(options)
+    super(options, AcornDetector.defaults)
 
     // Ensure ecmaVersions are sorted
-    this.options.ecmaVersions = this.options.ecmaVersions.sort().reverse()
+    this.options.ecmaVersions = sortBy(this.options.ecmaVersions)
 
     // Lazy-require acorn
     this.acorn = this.options.acorn || require('acorn')
@@ -14,13 +15,13 @@ module.exports = class AcornDetector extends BaseDetector {
 
   static get defaults () {
     return {
-      ecmaVersions: [10, 9, 8, 7, 6, 5]
+      ecmaVersions: [9, 8, 7, 6, 5]
     }
   }
 
-  detect (context) {
+  async detect (context) {
     // Try to parse and detect ecmaVersion
-    const { ecmaVersion } = this._detectEcmaVersion(context.source)
+    const { ecmaVersion } = this._parse(context.source)
 
     // Set context.ecmaVersion if detected
     if (ecmaVersion) {
@@ -29,7 +30,7 @@ module.exports = class AcornDetector extends BaseDetector {
   }
 
   _parse (source) {
-    for (const ecmaVersion of this.ecmaVersions) {
+    for (const ecmaVersion of this.options.ecmaVersions) {
       try {
         const parsed = this.acorn.parse(source, { ecmaVersion })
 
@@ -44,7 +45,8 @@ module.exports = class AcornDetector extends BaseDetector {
       }
     }
 
-    // Nothing detected :( Probably not a valid js code at all
+    // Nothing detected :(
+    // Probably not a valid js code at all
     return {
       ecmaVersion: 0
     }

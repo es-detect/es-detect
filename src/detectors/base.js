@@ -1,13 +1,9 @@
 module.exports = class BaseDetector {
-  constructor (options) {
-    this.options = Object.assign({}, this.defaults, options)
+  constructor (options, defaults) {
+    this.options = Object.assign({}, defaults, options)
   }
 
-  static get defaults () {
-    return {}
-  }
-
-  detect (context) {
+  async detect (context) {
     throw new Error('detect() not implemented!')
   }
 }
