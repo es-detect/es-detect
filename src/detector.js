@@ -14,7 +14,7 @@ module.exports = class Detector {
     }
 
     if (!(context instanceof Context)) {
-      throw new Error('first argument is expected to be an instance of Contest')
+      throw new Error('first argument is expected to be an instance of Context')
     }
 
     for (const detector of this.detectors) {

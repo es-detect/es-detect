@@ -19,7 +19,7 @@ async function fromFile (fileName, encoding = 'utf-8') {
 
 // Resolve from package
 async function fromModule (moduleName, options) {
-  // Try to resovle module path
+  // Try to resolve module path
   const resolvedPath = require.resolve(moduleName, options)
 
   // Use fromFile to create initial context
