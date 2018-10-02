@@ -29,6 +29,22 @@ describe('Acorn Detector', () => {
     expect(context.ecmaVersion).toEqual(6)
   })
 
+  describe('detect es modules', () => {
+    it('import', async () => {
+      const context = await loadFixture('es6/import-module.js')
+      context.features = true
+      await detector.detect(context)
+      expect(context.features.esModule).toEqual(true)
+    })
+
+    it('export', async () => {
+      const context = await loadFixture('es6/export-module.js')
+      context.features = true
+      await detector.detect(context)
+      expect(context.features.esModule).toEqual(true)
+    })
+  })
+
   it('detect es7', async () => {
     const context = await loadFixture('es7/exponentiation.js')
     await detector.detect(context)
@@ -45,21 +61,5 @@ describe('Acorn Detector', () => {
     const context = await loadFixture('es9/private-method.js')
     await detector.detect(context)
     expect(context.ecmaVersion).toEqual(undefined) // TODO
-  })
-
-  describe('detect es modules', () => {
-    it('import', async () => {
-      const context = await loadFixture('es-modules/import-module.js')
-      context.features = true
-      await detector.detect(context)
-      expect(context.features.esModule).toEqual(true)
-    })
-
-    it('export', async () => {
-      const context = await loadFixture('es-modules/export-module.js')
-      context.features = true
-      await detector.detect(context)
-      expect(context.features.esModule).toEqual(true)
-    })
   })
 })
