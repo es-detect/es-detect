@@ -31,14 +31,14 @@ describe('Acorn Detector', () => {
 
   describe('detect es modules', () => {
     it('import', async () => {
-      const context = await loadFixture('es6/import-module.js')
+      const context = await loadFixture('es6/import.js')
       context.features = true
       await detector.detect(context)
       expect(context.features.esModule).toEqual(true)
     })
 
     it('export', async () => {
-      const context = await loadFixture('es6/export-module.js')
+      const context = await loadFixture('es6/export.js')
       context.features = true
       await detector.detect(context)
       expect(context.features.esModule).toEqual(true)
