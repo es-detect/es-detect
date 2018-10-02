@@ -3,6 +3,9 @@ module.exports = class Context {
     // Current module name
     this.fileName = null
 
+    // Detector name
+    this.detector = 'acorn'
+
     // Format of the source
     this.type = null
 

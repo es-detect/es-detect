@@ -6,4 +6,8 @@ module.exports = class BaseDetector {
   async detect (context) {
     throw new Error('detect() not implemented!')
   }
+
+  async detectFeatures (ast) {
+    throw new Error('detectFeatures() not implemented!')
+  }
 }

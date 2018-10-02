@@ -46,4 +46,20 @@ describe('Acorn Detector', () => {
     await detector.detect(context)
     expect(context.ecmaVersion).toEqual(undefined) // TODO
   })
+
+  describe('detect es modules', () => {
+    it('import', async () => {
+      const context = await loadFixture('es-modules/import-module.js')
+      context.features = true
+      await detector.detect(context)
+      expect(context.features.esModule).toEqual(true)
+    })
+
+    it('export', async () => {
+      const context = await loadFixture('es-modules/export-module.js')
+      context.features = true
+      await detector.detect(context)
+      expect(context.features.esModule).toEqual(true)
+    })
+  })
 })

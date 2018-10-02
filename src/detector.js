@@ -3,9 +3,9 @@ const Context = require('./context')
 
 module.exports = class Detector {
   constructor () {
-    this.detectors = [
-      new AcornDetector()
-    ]
+    this.detectors = {
+      'acorn': new AcornDetector()
+    }
   }
 
   async detect (context) {
@@ -17,9 +17,8 @@ module.exports = class Detector {
       throw new Error('first argument is expected to be an instance of Context')
     }
 
-    for (const detector of this.detectors) {
-      await detector.detect(context)
-    }
+    const detector = this.detectors[context.detector]
+    await detector.detect(context)
 
     return context
   }
