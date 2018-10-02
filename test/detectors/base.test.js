@@ -10,4 +10,8 @@ describe('Base Detector', () => {
   it('detect() should throw error', async () => {
     await expect(detector.detect()).rejects.toThrow()
   })
+
+  it('detect() should throw error', async () => {
+    await expect(detector.detectFeatures()).rejects.toThrow()
+  })
 })
